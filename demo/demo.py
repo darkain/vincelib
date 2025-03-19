@@ -1,11 +1,20 @@
 
 
 ################################################################################
+# GLOBAL DEPENDENCIES
+################################################################################
+import json
+
+
+
+
+################################################################################
 # LOCAL DEPENDENCIES
 ################################################################################
 import shared
 from shared import cli
 from shared import color
+from shared import file
 
 
 
@@ -13,11 +22,11 @@ from shared import color
 ################################################################################
 # SOME BASIC TEST FUNCTIONS
 ################################################################################
-def cli_test(args):
+def cli_test():
 	print("Some Stuff")
 
 
-def cli_color(args):
+def cli_color():
 	print("===" + color.red("RED") + "===")
 	print("===" + color.green("GREEN") + "===")
 	print("===" + color.blue("BLUE") + "===")
@@ -33,22 +42,29 @@ def cli_color(args):
 	print("===" + color.bgyellow(color.black("YELLOW")) + "===")
 
 
-def cli_blink(args):
+def cli_blink():
 	print("===" + color.blink("BLINKING") + "===")
 	print("===" + color.blink_fast("BLINKING") + "===")
 
 
-def cli_rgb(args):
+def cli_rgb():
 	print("===" + color.rgb("COLOR", 50, 100, 255) + "===")
 	print("===" + color.bgrgb("COLOR", 255, 100, 50) + "===")
 
-def cli_style(args):
+def cli_style():
 	print("===" + color.italic("Italic") + "===")
 	print("===" + color.underline("Underline") + "===")
 	print("===" + color.strike("Strike") + "===")
 	print("===" + color.overline("Overline") + "===")
 	print("===" + color.invert("Invert") + "===")
 	print("===" + color.hide("Hidden") + "===")
+
+
+def cli_menu():
+	data = file.read_json("menu.json")
+	print(json.dumps(data, indent=4))
+
+
 
 
 ################################################################################
