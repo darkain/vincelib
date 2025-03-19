@@ -1,18 +1,32 @@
 
 
 ################################################################################
-# EXTERNAL DEPENDENCIES
+# Control Sequence Introducer
+# https://en.wikipedia.org/wiki/ANSI_escape_code#Select_Graphic_Rendition_parameters
 ################################################################################
-import	colorama
-from	colorama	import Style, Fore, Back
+def csi(code, *args):
+	out = "\033[" + str(code)
+	for arg in args:
+		out += ';' + str(arg)
+	return  out + "m"
 
 
 
 
 ################################################################################
-# INITIALIZE EXTERNAL DEPENDENCIES
+# RESET TERMINAL CONTROL CODES
 ################################################################################
-colorama.init()
+def reset():
+	return csi(0)
+
+
+
+
+################################################################################
+# INVERT FOREGROUND/BACKGROUND
+################################################################################
+def invert(text):
+	return csi(7) + str(text) + csi(27)
 
 
 
@@ -21,7 +35,16 @@ colorama.init()
 # PRINT BOLD TEXT
 ################################################################################
 def bold(text):
-	return Style.BRIGHT + str(text) + Style.RESET_ALL
+	return csi(1) + str(text) + csi(22)
+
+
+
+
+################################################################################
+# PRINT BOLD TEXT
+################################################################################
+def faint(text):
+	return csi(2) + str(text) + csi(22)
 
 
 
@@ -29,8 +52,17 @@ def bold(text):
 ################################################################################
 # PRINT TEXT WITH FOREGROUND COLORING
 ################################################################################
-def foreground(style, text):
-	return style + str(text) + Fore.RESET
+def foreground(text, style):
+	return style + str(text) + csi(39)
+
+
+
+
+################################################################################
+# RAW RGB VALUES FOR FOREGROUND COLORING
+################################################################################
+def rgb(text, r, g, b):
+	return foreground(text, csi(38, 2, r, g, b))
 
 
 
@@ -39,7 +71,7 @@ def foreground(style, text):
 # PRINT RED TEXT
 ################################################################################
 def red(text):
-	return foreground(Fore.RED, text)
+	return foreground(text, csi(31))
 
 
 
@@ -48,7 +80,7 @@ def red(text):
 # PRINT GREEN TEXT
 ################################################################################
 def green(text):
-	return foreground(Fore.GREEN, text)
+	return foreground(text, csi(32))
 
 
 
@@ -57,7 +89,7 @@ def green(text):
 # PRINT BLUE TEXT
 ################################################################################
 def blue(text):
-	return foreground(Fore.BLUE, text)
+	return foreground(text, csi(34))
 
 
 
@@ -66,7 +98,7 @@ def blue(text):
 # PRINT YELLOW TEXT
 ################################################################################
 def yellow(text):
-	return foreground(Fore.YELLOW, text)
+	return foreground(text, csi(33))
 
 
 
@@ -75,7 +107,7 @@ def yellow(text):
 # PRINT MAGENTA TEXT
 ################################################################################
 def magenta(text):
-	return foreground(Fore.MAGENTA, text)
+	return foreground(text, csi(35))
 
 
 
@@ -84,7 +116,7 @@ def magenta(text):
 # PRINT CYAN TEXT
 ################################################################################
 def cyan(text):
-	return foreground(Fore.CYAN, text)
+	return foreground(text, csi(36))
 
 
 
@@ -93,7 +125,7 @@ def cyan(text):
 # PRINT BLACK TEXT
 ################################################################################
 def black(text):
-	return foreground(Fore.BLACK, text)
+	return foreground(text, csi(30))
 
 
 
@@ -102,16 +134,25 @@ def black(text):
 # PRINT WHITE TEXT
 ################################################################################
 def white(text):
-	return foreground(Fore.WHITE, text)
+	return foreground(text, csi(37))
 
 
 
 
 ################################################################################
-# PRINT TEXT WITH FOREGROUND COLORING
+# PRINT TEXT WITH BACKGROUND COLORING
 ################################################################################
-def background(style, text):
-	return style + str(text) + Back.RESET
+def background(text, style):
+	return style + str(text) + csi(49)
+
+
+
+
+################################################################################
+# RAW RGB VALUES FOR FOREGROUND COLORING
+################################################################################
+def bgrgb(text, r, g, b):
+	return background(text, csi(48, 2, r, g, b))
 
 
 
@@ -120,7 +161,7 @@ def background(style, text):
 # PRINT RED TEXT
 ################################################################################
 def bgred(text):
-	return background(Back.RED, text)
+	return background(text, csi(41))
 
 
 
@@ -129,7 +170,7 @@ def bgred(text):
 # PRINT GREEN TEXT
 ################################################################################
 def bggreen(text):
-	return background(Back.GREEN, text)
+	return background(text, csi(42))
 
 
 
@@ -138,7 +179,7 @@ def bggreen(text):
 # PRINT BLUE TEXT
 ################################################################################
 def bgblue(text):
-	return background(Back.BLUE, text)
+	return background(text, csi(44))
 
 
 
@@ -147,7 +188,7 @@ def bgblue(text):
 # PRINT YELLOW TEXT
 ################################################################################
 def bgyellow(text):
-	return background(Back.YELLOW, text)
+	return background(text, csi(43))
 
 
 
@@ -156,7 +197,7 @@ def bgyellow(text):
 # PRINT MAGENTA TEXT
 ################################################################################
 def bgmagenta(text):
-	return background(Back.MAGENTA, text)
+	return background(text, csi(45))
 
 
 
@@ -165,7 +206,7 @@ def bgmagenta(text):
 # PRINT CYAN TEXT
 ################################################################################
 def bgcyan(text):
-	return background(Back.CYAN, text)
+	return background(text, csi(46))
 
 
 
@@ -174,7 +215,16 @@ def bgcyan(text):
 # PRINT BLACK TEXT
 ################################################################################
 def bgblack(text):
-	return background(Back.BLACK, text)
+	return background(text, csi(40))
+
+
+
+
+################################################################################
+# PRINT GRAY TEXT
+################################################################################
+def bgwhite(text):
+	return background(text, csi(47))
 
 
 
@@ -183,4 +233,66 @@ def bgblack(text):
 # PRINT WHITE TEXT
 ################################################################################
 def bgwhite(text):
-	return background(Back.WHITE, text)
+	return background(text, csi(107))
+
+
+
+
+################################################################################
+# BLINKING TEXT
+################################################################################
+def blink(text):
+	return csi(5) + str(text) + csi(25)
+
+
+
+################################################################################
+# BLINKING TEXT
+################################################################################
+def blink_fast(text):
+	return csi(6) + str(text) + csi(25)
+
+
+
+
+################################################################################
+# ITALIC TEXT
+################################################################################
+def italic(text):
+	return csi(3) + str(text) + csi(23)
+
+
+
+
+################################################################################
+# UNDERLINED TEXT
+################################################################################
+def underline(text):
+	return csi(4) + str(text) + csi(24)
+
+
+
+
+################################################################################
+# OVERLINED TEXT
+################################################################################
+def overline(text):
+	return csi(53) + str(text) + csi(55)
+
+
+
+
+################################################################################
+# STRIKED OUT TEXT
+################################################################################
+def strike(text):
+	return csi(9) + str(text) + csi(29)
+
+
+
+
+################################################################################
+# HIDE TEXT
+################################################################################
+def hide(text):
+	return csi(8) + str(text) + csi(28)
