@@ -15,6 +15,7 @@ import shared
 from shared import cli
 from shared import color
 from shared import file
+from shared import html
 
 
 
@@ -64,6 +65,11 @@ def cli_menu():
 	data = file.read_json("menu.json")
 	print(json.dumps(data, indent=4))
 
+
+
+def cli_webdir(args):
+	for arg in args:
+		print(html.webdir(arg))
 
 
 

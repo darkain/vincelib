@@ -57,7 +57,7 @@ def read_local(path, mode='r'):
 ################################################################################
 def read_url(url):
 	data = urlopen(str(url).replace(' ', '+'))
-	return text.from_bytes(data)
+	return text.from_bytes(data.read())
 
 
 
