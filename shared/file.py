@@ -8,7 +8,6 @@ from	os.path			import	expanduser
 from	urllib.request	import	urlopen
 from	urllib.parse	import	urlparse
 from	subprocess		import	Popen, PIPE, DEVNULL
-import	boto3
 import	json
 import	sys
 import	shlex
@@ -109,26 +108,6 @@ def read_sshcli(path):
 
 
 ################################################################################
-# READ A SECRET OUT OF AWS SECRETS MANAGER
-################################################################################
-def read_secret(region, name):
-	session	= boto3.session.Session()
-
-	client	= session.client(
-		service_name	= 'secretsmanager',
-		region_name		= region
-	)
-
-	secret	= client.get_secret_value(
-		SecretId		= name
-	)
-
-	return secret['SecretString']
-
-
-
-
-################################################################################
 # OPEN A FILE (LOCALLY, REMOTELY, OR VIRTUALLY) AND RETURN ITS CONTENTS
 ################################################################################
 def read(path, mode='r', safe=None):
@@ -159,12 +138,6 @@ def read(path, mode='r', safe=None):
 		# RUN A COMMAND REMOTELY VIA SSH AND RETURN ITS STDOUT
 		if path.startswith('ssh+cli://'):
 			return read_sshcli(path)
-
-		# PULL DOWN A SECRET FROM AWS SECRETS MANAGER
-		if path.startswith('aws+secret://'):
-			parts = path[13:].split('/', 1)
-			parts.append('')
-			return read_secret(parts[0], parts[1])
 
 		# ALL OTHER URL/URI SCHEMAS
 		return read_url(path)
